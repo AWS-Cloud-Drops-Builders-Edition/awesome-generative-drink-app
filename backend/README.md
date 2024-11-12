@@ -15,9 +15,30 @@ Este projeto utiliza Poetry para gerenciamento de dependências. O arquivo `pypr
 
 ## Configuração e Implantação
 
-1. Certifique-se de ter o AWS CDK e Poetry instalados e configurados.
+1. Certifique-se de ter o AWS CDK, Poetry e pre-commit instalados e configurados.
 2. Navegue até o diretório `backend`.
 3. Execute `poetry install` para instalar as dependências do projeto.
+4. Execute `pre-commit install` para instalar os hooks de pre-commit.
+
+## Uso do pre-commit
+
+Este projeto utiliza pre-commit hooks para lint e formatação do código Python. Os hooks configurados incluem:
+
+- Remoção de espaços em branco no final das linhas
+- Correção de final de arquivo
+- Verificação de arquivos YAML
+- Verificação de arquivos grandes adicionados
+- Formatação com Black
+- Linting com Flake8
+- Ordenação de imports com isort
+
+Para executar os hooks manualmente em todos os arquivos:
+
+```
+pre-commit run --all-files
+```
+
+Os hooks serão executados automaticamente antes de cada commit.
 4. Execute `poetry run cdk deploy` para implantar a stack em sua conta AWS.
 
 ## Endpoints da API

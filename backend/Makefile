@@ -1,16 +1,22 @@
-# Makefile for backend application
-
-# Variables
 PYTHON := python3
-PIP := pip
 POETRY := poetry
 BUILD_DIR := .build
 
-# Targets
-.PHONY: clean install build synth deploy destroy test
+.PHONY: clean dev precommit install build synth deploy destroy test
 
+.ONESHELL:  # run all commands in a single shell, ensuring it runs within a local virtual env
 clean:
 	rm -rf $(BUILD_DIR)
+
+dev:
+	pip install --upgrade pip pre-commit poetry
+	pre-commit install
+# ensures poetry creates a local virtualenv (.venv)
+	poetry config --local virtualenvs.in-project true
+	poetry install --no-root
+
+precommit:
+	pre-commit run --all-files
 
 install:
 	$(POETRY) install
@@ -24,13 +30,13 @@ build:
 test:
 	$(POETRY) run pytest tests/
 
-synth: build 
+synth: build
 	$(POETRY) run cdk synth
 
-deploy: synth
+deploy: build
 	$(POETRY) run cdk deploy
 
-destroy: 
+destroy:
 	$(POETRY) run cdk destroy
 
 .PHONY: test-only
