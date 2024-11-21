@@ -1,6 +1,6 @@
 # Backend
 
-Este é o backend da aplicação, construído com AWS CDK, Lambda e API Gateway.
+Este é o backend da aplicação, construído com AWS CDK, Lambda e API Gateway. A aplicação inicial foi construída com Amazon Q Developer, assim como várias das alterações subsequentes.
 
 ## Estrutura do Projeto
 
