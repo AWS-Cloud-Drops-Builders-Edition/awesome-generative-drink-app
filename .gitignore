@@ -21,6 +21,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+.pytest_cache
+
 
 # JavaScript/Node.js
 node_modules/

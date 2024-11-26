@@ -5,7 +5,7 @@ from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
 
 
-class BackendStack(Stack):
+class AwesomeGenerativeDrinkStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
@@ -22,7 +22,7 @@ class BackendStack(Stack):
             "GreeterHandler",
             runtime=_lambda.Runtime.PYTHON_3_12,
             code=_lambda.Code.from_asset(".build/lambda"),
-            handler="handler.handler",
+            handler="service.drink.handlers.handle_get_greeting.lambda_handler",
             layers=[lambda_layer],
             timeout=Duration.seconds(10),
             memory_size=128,

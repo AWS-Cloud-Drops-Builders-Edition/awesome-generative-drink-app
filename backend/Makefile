@@ -2,7 +2,7 @@ PYTHON := python3
 POETRY := poetry
 BUILD_DIR := .build
 
-.PHONY: clean dev precommit install build synth deploy destroy test
+.PHONY: clean dev validate install build synth deploy destroy test
 
 .ONESHELL:  # run all commands in a single shell, ensuring it runs within a local virtual env
 clean:
@@ -15,7 +15,7 @@ dev:
 	poetry config --local virtualenvs.in-project true
 	poetry install --no-root
 
-precommit:
+validate:
 	pre-commit run --all-files
 
 install:
@@ -23,9 +23,9 @@ install:
 
 build:
 	mkdir -p $(BUILD_DIR)/lambda
-	cp lambda/*.py $(BUILD_DIR)/lambda/
+	cp -r service  $(BUILD_DIR)/lambda/
 	mkdir -p $(BUILD_DIR)/layer
-	$(POETRY) export --without-hashes --without=dev --format=requirements.txt | grep -v "^\s*#" | grep -v "^-e" > $(BUILD_DIR)/layer/requirements.txt
+	$(POETRY) export --without-hashes --without=dev --format=requirements.txt > $(BUILD_DIR)/layer/requirements.txt
 
 test:
 	$(POETRY) run pytest tests/

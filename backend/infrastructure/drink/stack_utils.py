@@ -2,8 +2,7 @@ import getpass
 import os
 
 import git
-
-from backend.constants import SERVICE_NAME
+from infrastructure.drink.constants import SERVICE_NAME
 
 
 def get_git_branch():

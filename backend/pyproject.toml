@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "backend"
+name = "infrastructure"
 version = "0.1.0"
 description = "Backend for AWSome Generative Drinks App"
 authors = ["Ana Cunha, Marcelo Palladino"]
