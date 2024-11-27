@@ -14,11 +14,11 @@ app = APIGatewayRestResolver()
 @app.get("/")
 @tracer.capture_method
 def handle_get_greeting():
-    event = parse(
+    greeting_request = parse(
         event=app.current_event.query_string_parameters, model=GetGreetingRequest
     )
-    logger.info(f"Greeting request for name: {event.name}")
-    return greeting(event.name)
+    logger.info(f"Greeting request for name: {greeting_request.name}")
+    return greeting(greeting_request)
 
 
 @logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_REST)
