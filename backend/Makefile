@@ -23,7 +23,8 @@ install:
 
 build:
 	mkdir -p $(BUILD_DIR)/lambda
-	cp -r service  $(BUILD_DIR)/lambda/
+	rm -rf $(BUILD_DIR)/lambda/*
+	rsync -av --exclude '__pycache__' service/ $(BUILD_DIR)/lambda/service/
 	mkdir -p $(BUILD_DIR)/layer
 	$(POETRY) export --without-hashes --without=dev --format=requirements.txt > $(BUILD_DIR)/layer/requirements.txt
 

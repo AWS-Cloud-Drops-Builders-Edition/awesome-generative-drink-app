@@ -14,9 +14,7 @@ app = APIGatewayRestResolver()
 @app.get("/")
 @tracer.capture_method
 def handle_get_greeting():
-    greeting_request = parse(
-        event=app.current_event.query_string_parameters, model=GetGreetingRequest
-    )
+    greeting_request = parse(event=app.current_event.query_string_parameters, model=GetGreetingRequest)
     logger.info(f"Greeting request for name: {greeting_request.name}")
     return greeting(greeting_request)
 

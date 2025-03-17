@@ -1,14 +1,18 @@
-from aws_cdk import Duration, Stack
-from aws_cdk import aws_apigateway as apigw
+from aws_cdk import Stack
 from aws_cdk import aws_lambda as _lambda
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
+from infrastructure.drink.constructs.api import DrinkApiConstruct
+from infrastructure.drink.constructs.secrets import DrinkSecretsConstruct
+from infrastructure.drink.constructs.storage import DrinkStorageConstruct
+from infrastructure.drink.constructs.workflow import DrinkWorkflowConstruct
 
 
 class AwesomeGenerativeDrinkStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        # Criar Lambda Layer comum para todas as funções
         lambda_layer = PythonLayerVersion(
             self,
             "CommonDrinkAppLayer",
@@ -17,17 +21,22 @@ class AwesomeGenerativeDrinkStack(Stack):
             description="Common layer for Lambda functions",
         )
 
-        greeter_lambda = _lambda.Function(
+        # Criar constructs
+        storage = DrinkStorageConstruct(self, "DrinkStorage")
+        secrets = DrinkSecretsConstruct(self, "DrinkSecrets")
+
+        workflow = DrinkWorkflowConstruct(
             self,
-            "GreeterHandler",
-            runtime=_lambda.Runtime.PYTHON_3_12,
-            code=_lambda.Code.from_asset(".build/lambda"),
-            handler="service.drink.handlers.handle_get_greeting.lambda_handler",
-            layers=[lambda_layer],
-            timeout=Duration.seconds(10),
-            memory_size=128,
+            "DrinkWorkflow",
+            lambda_layer=lambda_layer,
+            recipes_table=storage.recipes_table,
+            recipes_bucket=storage.recipes_bucket,
+            sendgrid_secret=secrets.sendgrid_secret,
         )
 
-        api = apigw.RestApi(self, "GreeterApi")
-
-        api.root.add_method("GET", apigw.LambdaIntegration(greeter_lambda))
+        DrinkApiConstruct(
+            self,
+            "DrinkApi",
+            lambda_layer=lambda_layer,
+            state_machine=workflow.state_machine,
+        )
