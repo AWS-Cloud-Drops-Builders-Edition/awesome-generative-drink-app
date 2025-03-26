@@ -8,6 +8,7 @@ authors = ["Ana Cunha, Marcelo Palladino"]
 python = "^3.12"
 aws-lambda-powertools = {version = "^2.43.1", extras = ["tracer"]}
 pydantic = "^2.9.2"
+boto3 = "^1.37.19"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.4"

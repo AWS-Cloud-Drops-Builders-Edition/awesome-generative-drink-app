@@ -2,7 +2,7 @@ PYTHON := python3
 POETRY := poetry
 BUILD_DIR := .build
 
-.PHONY: clean dev validate install build synth deploy destroy test
+.PHONY: clean dev validate install build synth deploy destroy test test-unit test-integration
 
 .ONESHELL:  # run all commands in a single shell, ensuring it runs within a local virtual env
 clean:
@@ -30,6 +30,14 @@ build:
 
 test:
 	$(POETRY) run pytest tests/
+
+# Executa apenas os testes de unidade
+test-unit:
+	$(POETRY) run pytest tests/drink/unit/ -v
+
+# Executa apenas os testes de integração
+test-integration:
+	$(POETRY) run pytest tests/drink/integration/ -v -m integration
 
 synth: build
 	$(POETRY) run cdk synth

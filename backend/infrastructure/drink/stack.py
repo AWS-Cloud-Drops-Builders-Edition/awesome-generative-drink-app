@@ -1,4 +1,4 @@
-from aws_cdk import Stack
+from aws_cdk import CfnOutput, Stack
 from aws_cdk import aws_lambda as _lambda
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
@@ -40,3 +40,8 @@ class AwesomeGenerativeDrinkStack(Stack):
             lambda_layer=lambda_layer,
             state_machine=workflow.state_machine,
         )
+
+        # Exportar recursos para testes de integração
+        CfnOutput(self, "DrinkRecipesTableName", value=storage.recipes_table.table_name, export_name="recipes-table-name")
+
+        CfnOutput(self, "DrinkRecipesBucketName", value=storage.recipes_bucket.bucket_name, export_name="recipes-bucket-name")
